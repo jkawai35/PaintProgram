@@ -68,6 +68,7 @@ function connectVariablesToGLSL(){
 const POINT = 0;
 const TRIANGLE = 1;
 const CIRCLE = 2;
+const SLUG = 3;
 
 // Globals related to UI elements
 let g_selectedColor = [1.0, 1.0, 1.0, 1.0];
@@ -81,11 +82,13 @@ function addActionsFromUI(){
   //Button information
   document.getElementById('green').onclick = function() { g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
   document.getElementById('red').onclick = function() { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
-  document.getElementById('clearButton').onclick = function() {g_shapesList = []; renderAllShapes(); };
+  document.getElementById('clearButton').onclick = function() {g_shapesList = []; clearCanvas(); };
 
   document.getElementById('pointButton').onclick = function() { g_selectedType=POINT; };
   document.getElementById('triButton').onclick = function() {g_selectedType=TRIANGLE; };
   document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE; };
+  document.getElementById('slugButton').onclick = function() {g_selectedType = SLUG; drawSlug(); };
+
 
 
 
@@ -170,7 +173,7 @@ function renderAllShapes(){
   var startTime = performance.now();
 
   // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT);
+  //gl.clear(gl.COLOR_BUFFER_BIT);
 
   var len = g_shapesList.length;
 
@@ -182,6 +185,22 @@ function renderAllShapes(){
   sendTextToHTML("numdot: " + len + " ms: " + Math.floor(duration) + " fps: " + Math.floor(10000/duration)/10, "numdot");
 }
 
+function clearCanvas(){
+  var startTime = performance.now();
+
+  // Clear <canvas>
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  var len = g_shapesList.length;
+
+  for(var i = 0; i < len; i++) {
+    g_shapesList[i].render();
+  }
+
+  var duration = performance.now() - startTime;
+  sendTextToHTML("numdot: " + len + " ms: " + Math.floor(duration) + " fps: " + Math.floor(10000/duration)/10, "numdot"); 
+}
+
 //set the text of HTML element
 function sendTextToHTML(text, htmlID) {
   var htmlElm = document.getElementById(htmlID);
@@ -190,4 +209,65 @@ function sendTextToHTML(text, htmlID) {
     return;
   }
   htmlElm.innerHTML = text;
+}
+
+function drawSlug(){
+  var triangles = [
+
+    {vertices: [-1, -.2, -1, 1, 1, 1], color: [0.67, 0.84, 0.9, 1.0]}, //sky
+    {vertices: [1, -.2, 1, 1, -1, -.2], color: [0.67, 0.84, 0.9, 1.0]},
+
+    {vertices: [-1, -.2, -1, -1, 1, -1], color: [0.0, .3, 0.0, 1.0]}, //ground
+    {vertices: [-1, -.2, 1, -.2, 1, -1], color: [0.0, .3, 0.0, 1.0]}, 
+   
+    {vertices: [.3, 0.0, .4, 0.0, .4, .1], color: [1.0, .9, 0.0, 1.0]},//head
+    {vertices: [.4, 0.0, .5, 0.0, .4, .1], color: [1.0, .95, 0.0, 1.0]},
+    {vertices: [.5, 0.0, .5, .1, .4, .1], color: [1.0, .8, 0.0, 1.0]},
+    {vertices: [.3, 0.0, .4, .1, .3, .2], color: [1.0, .85, 0.0, 1.0]},
+    {vertices: [.3, .2, .4, .1, .5, .2], color: [1.0, .95, 0.0, 1.0]},
+    {vertices: [.4, .1, .5, .1, .5, .2], color: [1.0, .9, 0.0, 1.0]},
+
+
+    {vertices: [.3, .2, .4, .3, .4, .2], color: [1.0, .89, 0.0, 1.0]}, //ears
+    {vertices: [.4, .2, .5, .3, .5, .2], color: [1.0, .95, 0.0, 1.0]}, 
+
+    {vertices: [.3, -.2, .3, 0.0, .4, -.1], color: [1.0, .79, 0.0, 1.0]}, //slants
+    {vertices: [.4, -.1, .3, 0.0, .5, 0.0], color: [1.0, .85, 0.0, 1.0]},
+
+
+    {vertices: [.1, -.2, .2, -.1, .1, 0.0], color: [1.0, .9, 0.0, 1.0]}, //main body
+    {vertices: [.1, 0.0, .3, 0.0, .2, -.1], color: [1.0, .8, 0.0, 1.0]},
+    {vertices: [.1, -.2, .2, -.2, .2, -.1], color: [1.0, .85, 0.0, 1.0]},
+    {vertices: [.2, -.2, .3, -.2, .2, -.1], color: [1.0, .75, 0.0, 1.0]},
+    {vertices: [.2, -.1, .3, -.075, .3, 0.0], color: [1.0, .95, 0.0, 1.0]},
+    {vertices: [.2, -.1, .3, -.2, .3, -.075], color: [1.0, .88, 0.0, 1.0]},
+
+
+    {vertices: [.1, -.1, .1, 0.0, 0.0, -.05], color: [1.0, .92, 0.0, 1.0]}, //half1
+    {vertices: [-.1, -.1, .1, -.1, 0.0, -.05], color: [1.0, .8, 0.0, 1.0]},
+
+    {vertices: [0.0, -.15, .1, -.1, .1, -.2], color: [1.0, .95, 0.0, 1.0]}, //half2
+    {vertices: [0.0, -.15, -.1, -.1, .1, -.1], color: [1.0, .84, 0.0, 1.0]},
+
+    {vertices: [-.1, -.2, -.1, -.1, 0.0, -.15], color: [1.0, .92, 0.0, 1.0]}, //half3
+    {vertices: [-.1, -.2, 0.0, -.15, .1, -.2], color: [1.0, 1.0, 0.0, 1.0]},
+
+
+    {vertices: [-.1, -.1, -.2, -.15, -.1, -.2], color: [1.0, .9, 0.0, 1.0]}, //step down bottom
+    {vertices: [-.1, -.2, -.2, -.15, -.3, -.2], color: [1.0, .86, 0.0, 1.0]}, //step down bottom
+
+
+    {vertices: [-.3, -.2, -.3, -.1, -.2, -.15], color: [1.0, 1.0, 0.0, 1.0]}, //above step down
+    {vertices: [-.3, -.1, -.1, -.1, -.2, -.15], color: [1.0, .8, 0.0, 1.0]}, //above step down
+
+
+    {vertices: [-.3, -.2, -.4, -.2, -.3, -.1], color: [1.0, .85, 0.0, 1.0]}, //tail end
+    {vertices: [-.5, -.2, -.4, -.2, -.33, -.14], color: [1.0, .9, 0.0, 1.0]}, //tail end
+
+  ];
+
+  for(var t of triangles){
+    gl.uniform4f(u_FragColor, t.color[0], t.color[1], t.color[2], t.color[3]);
+    drawTriangle(t.vertices);
+  }
 }
