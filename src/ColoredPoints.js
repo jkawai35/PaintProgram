@@ -68,26 +68,39 @@ function connectVariablesToGLSL(){
 const POINT = 0;
 const TRIANGLE = 1;
 const CIRCLE = 2;
-const SLUG = 3;
 
 // Globals related to UI elements
 let g_selectedColor = [1.0, 1.0, 1.0, 1.0];
 let g_selectedSize = 5;
 let g_selectedType = POINT;
 let g_selectedSegments = 10;
+let rainbowMode = false;
+currentRainbowIndex = 0;
+
+// Rainbow mode array
+const rainbowColors = [
+  [1.0, 0.0, 0.0, 1.0], // Red
+  [1.0, 0.5, 0.0, 1.0], // Orange
+  [1.0, 1.0, 0.0, 1.0], // Yellow
+  [0.0, 1.0, 0.0, 1.0], // Green
+  [0.0, 0.0, 1.0, 1.0], // Blue
+  [0.29, 0.0, 0.51, 1.0], // Indigo
+  [0.93, 0.51, 0.93, 1.0] // Violet
+];
 
 
 function addActionsFromUI(){
 
   //Button information
-  document.getElementById('green').onclick = function() { g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
-  document.getElementById('red').onclick = function() { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
-  document.getElementById('clearButton').onclick = function() {g_shapesList = []; clearCanvas(); };
+  document.getElementById('green').onclick = function() { rainbowMode = false; g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
+  document.getElementById('red').onclick = function() { rainbowMode = false; g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
+  document.getElementById('clearButton').onclick = function() { rainbowMode = false; g_shapesList = []; clearCanvas(); };
+  document.getElementById('rainbow').onclick = function() {rainbowMode = !rainbowMode; if(rainbowMode){ startRainbow(); }};
 
   document.getElementById('pointButton').onclick = function() { g_selectedType=POINT; };
   document.getElementById('triButton').onclick = function() {g_selectedType=TRIANGLE; };
   document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE; };
-  document.getElementById('slugButton').onclick = function() {g_selectedType = SLUG; drawSlug(); };
+  document.getElementById('slugButton').onclick = function() { g_shapesList = []; clearCanvas(); drawSlug(); };
 
 
 
@@ -270,4 +283,17 @@ function drawSlug(){
     gl.uniform4f(u_FragColor, t.color[0], t.color[1], t.color[2], t.color[3]);
     drawTriangle(t.vertices);
   }
+}
+
+function startRainbow() {
+  if (!rainbowMode) return; // Exit if rainbow mode is off
+
+  // Set the current color to the next in the sequence
+  g_selectedColor = rainbowColors[currentRainbowIndex];
+  
+  // Update the index for the next color
+  currentRainbowIndex = (currentRainbowIndex + 1) % rainbowColors.length;
+  
+  // Schedule the next color update
+  setTimeout(startRainbow, 200); // Change color every 200ms (adjust as needed)
 }
