@@ -1,3 +1,6 @@
+// Jaren Kawai
+// jkawai@ucsc.edu
+
 class Triangle{
     constructor(){
       this.type='triangle';

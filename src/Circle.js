@@ -1,3 +1,6 @@
+// Jaren Kawai
+// jkawai@ucsc.edu
+
 class Circle{
     constructor(){
         this.type='circle'

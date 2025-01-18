@@ -1,3 +1,6 @@
+// Jaren Kawai
+// jkawai@ucsc.edu
+
 // ColoredPoint.js (c) 2012 matsuda
 // Vertex shader program
 var VSHADER_SOURCE = `
