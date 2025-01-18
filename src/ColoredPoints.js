@@ -94,7 +94,7 @@ function addActionsFromUI(){
   //Button information
   document.getElementById('green').onclick = function() { rainbowMode = false; g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
   document.getElementById('red').onclick = function() { rainbowMode = false; g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
-  document.getElementById('clearButton').onclick = function() { rainbowMode = false; g_shapesList = []; clearCanvas(); };
+  document.getElementById('clearButton').onclick = function() { g_shapesList = []; clearCanvas(); if (rainbowMode){ startRainbow(); }};
   document.getElementById('rainbow').onclick = function() {rainbowMode = !rainbowMode; if(rainbowMode){ startRainbow(); }};
 
   document.getElementById('pointButton').onclick = function() { g_selectedType=POINT; };
