@@ -1,6 +1,6 @@
 # Paint Program
 ## Added functionality
-Rainbow mode added
+Rainbow mode added </br>
 Recolor option that recolors all drawn shapes to a random color
 
 ## Reference drawing for picture
