@@ -104,6 +104,8 @@ function addActionsFromUI(){
   document.getElementById('triButton').onclick = function() {g_selectedType=TRIANGLE; };
   document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE; };
   document.getElementById('slugButton').onclick = function() { g_shapesList = []; clearCanvas(); drawSlug(); };
+  document.getElementById('recolor').onclick = function() { recolorShapes() };
+
 
 
 
@@ -299,4 +301,12 @@ function startRainbow() {
   
   // Schedule the next color update
   setTimeout(startRainbow, 200); // Change color every 200ms (adjust as needed)
+}
+
+function recolorShapes(){
+  for(let shape of g_shapesList){
+    shape.color = [Math.random(), Math.random(), Math.random(), 1.0];
+  }
+
+  renderAllShapes();
 }
